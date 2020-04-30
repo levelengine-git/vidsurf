@@ -1,0 +1,18 @@
+:root {
+  font-size: 16px;
+  font-family: sans-serif;
+}
+
+div.top {
+  padding-bottom: 3.5rem;
+	
+}
+div.box {
+  background: linear-gradient(lightgrey, white);
+  padding: 1.5rem 3.5rem;
+  border: 1px solid grey;
+  align-items: center;
+  text-align: center;
+  width: 30%;
+  margin: auto;
+}
