@@ -11,13 +11,17 @@
 	<div class="top"></div>
 
 	<div class="box">
-		<b>Sign in to Vidsurf</b>
+		<b>Sign up to Vidsurf today!</b>
 		<br />
 		
-		<form class="form-signin" action="processLogin.php" method="post">
+		<form class="form-signin" action="processSignup.php" method="post">
 		
 		<div>
-		<table>
+		<table style="margin: auto;">
+		<tr>
+			<td><label><strong>Email Address</strong></label></td>
+			<td><input class="form-control" type="text" name="email" required/></td>
+		</tr>
 		<tr>
 			<td><label><strong>Username</strong></label></td>
 			<td><input class="form-control" type="text" name="userName" required/></td>
@@ -26,10 +30,14 @@
 			<td><label><strong>Password</strong></label></td>
 			<td><input class="form-control" type="password" name="userPass" required/></td>
 		</tr>
+		<tr>
+			<td><label><strong>Confirm Password</strong></label></td>
+			<td><input class="form-control" type="password" name="confirmUserPass" required/></td>
+		</tr>
 		</table>
    		</div>
 
-		<button type="submit">Login</button>
+		<button type="submit">Sign Up</button>
 
 		</form>
 	</div>

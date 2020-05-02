@@ -2,7 +2,7 @@
 <!-- saved from url=(0036)https://vidsurf.glitch.me/index.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Vidsurf - share your videos with the world!</title>
-    <link rel="stylesheet" href="css/index.css">  
+    <link rel="stylesheet" href="css/index.css?ts=<?=time()?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="images/jquery.min.js.download"></script>
   </head>
@@ -13,55 +13,79 @@
 		<!-- ALWAYS show -->
         <a href="index.php">Home</a>
 		
-		<!-- if logged in... -->
-		<!--
-        <a href="upload.php">Upload</a>
-		<a href="index.php">Log Out</a>
-		-->
+		<?php		
+		// brings the data from active session here, or starts a session with no data		
+		error_reporting(0);
+    	session_start();
 		
-		<!-- if NOT logged in... -->
-		<a href="index.php">Sign Up</a>
-		<a href="login.php">Log In</a>
-		
+		// if logged in...
+		if ($_SESSION['userName'] != null) {
+			echo '<a href="upload.php">Upload</a>';
+			echo '<a href="processLogout.php">Log Out</a>';
+		}
+		// if NOT logged in...
+		else {
+			echo '<a href="signup.php">Sign Up</a>';
+			echo '<a href="login.php">Log In</a>';
+		}			
+		?>
+
 		<!-- ALWAYS show -->
 		<a href="index.php">Help</a>	
 				
 		<input type="text" />
 		<input type="submit" value="Search Videos">
-		
-		<a href="create_tables.php">Create Database Tables</a>
-		
+
       </font>
+	  
+	  <?php
+	  if ($_SESSION['userName'] != null) {
+		  echo '<hr />';
+		  echo '<h3 style=
+			"position: fixed; 
+			top: 25px; 
+			right: 25px; 
+			width: 300px; 
+			text-align: right;">
+		  Welcome levelengine</h3>';
+	  }
+	  ?>
     </nav>
     <aside class="sidebar">
 	
-	<!-- if logged in... -->
-	<div>
-      <div class="userinfo">
-        <div class="header">
-          Username
-        </div>
-        <div class="usericon" >
-          <img src="images/791224_man_512x512.png" style="max-width: 100%;">
-        </div>
-        <div class="footer" >
-          Subs: 1000
-          <br>
-          Views: 789
-          <br>
-          Videos: 54
-        </div>
-      </div>
-      <b>Manage content</b>
-      <hr>
-      <a href="https://vidsurf.glitch.me/index.html#">My stats</a><br>
-      <a href="https://vidsurf.glitch.me/index.html#">My videos</a><br>
-      <a href="https://vidsurf.glitch.me/index.html#">My info</a>
-      <br><br>
-      <b>My subs</b>
-      <hr>
-	</div>
-	<!-- if NOT logged in... -->
+	<?php
+	//if logged in...
+	if ($_SESSION['userName'] != null) {
+		echo '<div>';
+		  echo '<div class="userinfo">';
+			echo '<div class="header">';
+			  echo $_SESSION['userName'];
+			echo '</div>';
+			echo '<div class="usericon" >';
+			  echo '<img src="images/791224_man_512x512.png" style="max-width: 100%;">';
+			echo '</div>';
+			echo '<div class="footer" >';
+			  echo 'Subs: 0';
+			  echo '<br>';
+			  echo 'Views: 0';
+			  echo '<br>';
+			  echo 'Videos: 0';
+			echo '</div>';
+		  echo '</div>';
+		  echo '<b>Manage content</b>';
+		  echo '<hr>';
+		  echo '<a href="https://vidsurf.glitch.me/index.html#">My stats</a><br>';
+		  echo '<a href="https://vidsurf.glitch.me/index.html#">My videos</a><br>';
+		  echo '<a href="https://vidsurf.glitch.me/index.html#">My info</a>';
+		  echo '<br><br>';
+		  echo '<b>My subs</b>';
+		  echo '<hr>';
+		echo '</div>';
+	}
+	?>
+	
+	
+	<!-- ALWAYS show... -->
 	<div>
 		<b></b>
 	</div>
@@ -104,7 +128,7 @@
 	<!-- sample php code -->
 	<?php 
 	echo "Hello world! This is sample PHP code being executed. It also prints the numbers 1-20.<br />";
-	for ($i = 0; $i < 20; $i++) {
+	for ($i = 0; $i < 10; $i++) {
 		echo $i . "<br />";
 	}
 	?>

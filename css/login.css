@@ -13,6 +13,11 @@ div.box {
   border: 1px solid grey;
   align-items: center;
   text-align: center;
-  width: 30%;
+  width: 50%;
   margin: auto;
+}
+
+td {
+	padding-left: 20px;
+	padding-right: 20px;
 }

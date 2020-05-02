@@ -17,16 +17,20 @@
 		die("Connection failed: " . $conn->connect_error);
 	}
 
+	$users_table = "DROP TABLE Users";
+
+	if ($conn->query($users_table) === TRUE) {
+		echo "Table Users dropped successfully.<br />";
+	}
+
 	// sql to create table
 	$users_table = "CREATE TABLE Users (
 	user_id INT(8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(30) NOT NULL,
-	password VARCHAR(30) NOT NULL,
-	email VARCHAR(50),
+	password VARCHAR(300) NOT NULL,
+	email VARCHAR(70),
 	join_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	)";
-	
-	//$users_table = "DROP TABLE Users";
 
 	if ($conn->query($users_table) === TRUE) {
 		echo "Table Users created successfully.";
