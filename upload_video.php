@@ -42,6 +42,9 @@
 
 			$userId = $_SESSION['userId'];
 			
+			$query_existing_videos = "SELECT * FROM videos";
+			$result = $conn->query($query_existing_videos);
+			
 			// videos directory...
 			$videos_dir = "videos/";
 			$videoFile = $target_dir . "" . $fileName;
@@ -100,11 +103,11 @@
 						<td>
 						<select class="form-control" name="category">
 							<option value="">- select a category -</option>
-							<option value="Howto">Howto & Style</option>
-							<option value="Pets">Pets & Animals</option>
+							<option value="Howto & Style">Howto & Style</option>
+							<option value="Pets & Animals">Pets & Animals</option>
 							<option value="Travel">Travel</option>
 							<option value="Education">Education</option>
-							<option value="Nonprofits">Nonprofits & Activism</option>
+							<option value="Nonprofits & Activism">Nonprofits & Activism</option>
 							<option value="Entertainment">Entertainment</option>
 							<option value="Film">Film</option>
 							<option value="Comedy">Comedy</option>
@@ -112,7 +115,7 @@
 							<option value="News">News</option>
 							<option value="Music">Music</option>
 							<option value="Gaming">Gaming</option>
-							<option value="Autos">Autos & Vehicles</option>
+							<option value="Autos & Vehicles">Autos & Vehicles</option>
 							<option value="Technology">Technology</option>
 							<option value="Sports">Sports</option>
 						</select>
