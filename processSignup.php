@@ -123,8 +123,7 @@
 			// add the user to DB
 			$query_add_user = "INSERT INTO users (user_id, username, password, email, join_date)
 				VALUES (".($result->num_rows+1).", '$userName', '$userPass', '$email', '2020-05-01')";
-			echo ($query_add_user);
-			
+
 			if ($conn->query($query_add_user) === TRUE) {
 				echo "New record created successfully.";
 			} else {
@@ -139,12 +138,9 @@
 		unset($_SESSION);
 		session_destroy();
 
-		echo "<div>";
-
-		echo "<h4> Username already exists, please log in or sign up with a different username .</h4>";
-
-		echo "</div>";
-
+		echo "<div>
+			<h4> Username already exists, please log in or sign up with a different username .</h4>
+		</div>";
 		require("signUpPage.php");
 	}
 

@@ -17,25 +17,44 @@
 		die("Connection failed: " . $conn->connect_error);
 	}
 
-	$users_table = "DROP TABLE Users";
-
-	if ($conn->query($users_table) === TRUE) {
-		echo "Table Users dropped successfully.<br />";
-	}
-
 	// sql to create table
 	$users_table = "CREATE TABLE Users (
-	user_id INT(8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	username VARCHAR(30) NOT NULL,
-	password VARCHAR(300) NOT NULL,
-	email VARCHAR(70),
-	join_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+		user_id INT(8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		username VARCHAR(30) NOT NULL,
+		password VARCHAR(300) NOT NULL,
+		email VARCHAR(70),
+		join_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	)";
+	
+	
+	$videos_table = "DROP TABLE Videos"; 
+	if ($conn->query($videos_table) === TRUE) {
+		echo "Table Videos dropped successfully.<br />";		
+	}
+
+	$videos_table = "CREATE TABLE Videos (
+		video_id INT(8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		video_name VARCHAR(100) NOT NULL,
+		video_description VARCHAR(5000) NOT NULL,
+		file_name VARCHAR(100) NOT NULL,
+		video_extension VARCHAR(8) NOT NULL,
+		video_file VARCHAR(300) NOT NULL,
+		date_uploaded TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		uploader INT(8) UNSIGNED,
+		category VARCHAR(30),		
+		FOREIGN KEY (uploader) REFERENCES Users(user_id)
 	)";
 
 	if ($conn->query($users_table) === TRUE) {
-		echo "Table Users created successfully.";
+		echo "Table Users created successfully.<br />";
 	} else {
-		echo "Error creating table: " . $conn->error;
+		echo "Error creating table: " . $conn->error . "<br />";
+	}
+
+	if ($conn->query($videos_table) === TRUE) {
+		echo "Table Videos created successfully.<br />";
+	} else {
+		echo "Error creating table: " . $conn->error . "<br />";
 	}
 	
 	//more tables go down here as needed...

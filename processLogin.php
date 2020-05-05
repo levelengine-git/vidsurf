@@ -49,6 +49,7 @@
 			echo (crypt($userPass, '$2y$07$'.$salt.'$')." == ".$row["password"]);
 			if (crypt($userPass, '$2y$07$'.$salt.'$') == $row["password"]) { //see if password is correct...
 				$correctPassword = true;
+				$_SESSION['userId'] = $row["user_id"]; // <- set the user's id into a session variable also
 				successful_login();
 			}
 			else {

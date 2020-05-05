@@ -14,33 +14,17 @@ body {
   grid-template-rows: auto 1fr 1fr;
 }
 
-nav {
-  background: linear-gradient(lightgrey, white);
-  padding: 1rem 3rem;
-  grid-column: 1/4;
-  border-bottom: 1px solid grey;
-  display: flex;
-  align-items: center;
-}
-
-nav img {
-  margin-right: 3rem;
-}
-
-nav a {
-  margin-right: 1rem;
+input.video_link {
+	color: rgb(220, 0, 0); 
+	font-weight: bold; 
+	font-size: 18px;
+	text-decoration: underline;
+	background-color: lightgrey; 
+	border: none;
 }
 
 a {
 	color: rgb(220, 0, 0);
-}
-
-aside.sidebar {
-  grid-column: 1/2;
-  grid-row: 2/4;
-  background: linear-gradient(to left, lightgrey, white);
-  border-right: 1px solid grey;
-  padding: 1rem;
 }
 
 aside.ads {
@@ -50,11 +34,7 @@ aside.ads {
   grid-row: 2/4;
 }
 
-aside .userinfo {
-  margin-bottom: 1rem;
-}
-
-.header {
+.header_index {
   padding: 0.5rem;
   text-align: center;
   background: linear-gradient(#111, black);
@@ -65,22 +45,21 @@ aside .userinfo {
   border-bottom: none;
 }
 
-.footer {
+.header_display_videos {
   padding: 0.5rem;
-  text-align: center;
   background: linear-gradient(#111, black);
   color: white;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   border: 2px solid #333;
-  border-top: none;
+  border-bottom: none;
 }
 
 main {
   padding: 1rem;
 }
 
-section .content {
+div.content {
   padding: 1rem;
   background: lightgrey;
   border-bottom-left-radius: 5px;
@@ -91,6 +70,6 @@ section .content {
   display: inline-block;
 }
 
-.video-card img{
+input.thumbnail {
   max-width: 200px;
 }
