@@ -25,12 +25,15 @@
 		<!-- ALWAYS show -->
 		<a href="index.php">Help</a>	
 				
-		<input type="text" />
-		<input type="submit" value="Search Videos">
+		<form method='GET' action="display_videos.php" class="search_bar">
+			<input type="text" name="video_query" />
+			<input type="submit" value="Search Videos">
+		</form>
 
       </font>
 	  
 	  <?php
+	  /*
 	  if ($_SESSION['userName'] != null) {
 		  echo '<hr />';
 		  echo '<h3 style=
@@ -39,7 +42,8 @@
 			right: 25px; 
 			width: 300px; 
 			text-align: right;">
-		  Welcome levelengine</h3>';
+		  Welcome $user</h3>';
 	  }
+	  */
 	  ?>
     </nav>

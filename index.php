@@ -21,6 +21,7 @@
             Featured videos
           </h1>
         </div>
+		<table>
         <div class="content">
           <div class="video-card">
 			<form method='GET' action="watch_video.php">
@@ -36,7 +37,7 @@
 				 </p>
 			 </form>
           </div>
-          <div class="video-card">
+          <div class="video-card">		  
             <form method='GET' action="watch_video.php">
 				<div class="thumbnail">
 				  <input class="thumbnail" type="image" src="images/image8-2-1024x576.png" alt="Another video" />
@@ -51,6 +52,7 @@
 			 </form>
           </div>
         </div>
+
       </section>
     </main>
 	

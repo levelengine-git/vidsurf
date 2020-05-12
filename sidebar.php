@@ -7,7 +7,7 @@ if ($_SESSION['userName'] != null) {
 	echo '<div>';
 	  echo '<div class="userinfo">';
 		echo '<div class="sidebar_index">';
-		  echo $_SESSION['userName'];
+		  echo '<a class="username" href="my_channel.php">'.$_SESSION['userName'].'</a>';
 		echo '</div>';
 		echo '<div class="usericon" >';
 		  echo '<img src="images/791224_man_512x512.png" style="max-width: 100%;">';
