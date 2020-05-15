@@ -122,7 +122,7 @@
 			
 			// add the user to DB
 			$query_add_user = "INSERT INTO users (user_id, username, password, email, join_date)
-				VALUES (".($result->num_rows+1).", '$userName', '$userPass', '$email', '2020-05-01')";
+				VALUES (".($result->num_rows+1).", '$userName', '$userPass', '$email', '2020-05-01', '')";
 
 			if ($conn->query($query_add_user) === TRUE) {
 				echo "New record created successfully.";

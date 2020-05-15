@@ -19,8 +19,6 @@
       <section class="featured-section">
         <div class="header_display_videos">
           <h1>
-		  
-		  
             Results for <?php 
 			$search_query = $_GET["video_query"];
 			echo $search_query; 
@@ -46,9 +44,8 @@
 					die("Connection failed: " . $conn->connect_error);
 				}
 				
-				$video_query = "SELECT * FROM videos WHERE video_name LIKE '%$search_query%'";
-				/*$video_query = "SELECT * FROM videos WHERE video_name LIKE '%$search_query%'
-					OR video_tags LIKE '%$search_query%'";*/
+				$video_query = "SELECT * FROM videos WHERE video_name LIKE '%$search_query%'
+					OR video_tags LIKE '%$search_query%'";
 
 				$result = $conn->query($video_query);
 
@@ -75,7 +72,7 @@
 					}
 				} 
 				else {
-					echo '<h3>NOTHING!</h3>';
+					echo '<h3>No search results found</h3>';
 				}
 			?>
 			</table>

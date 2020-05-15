@@ -1,3 +1,7 @@
+<?php
+	session_start();
+?>
+
 <!-- login page -->
 <!-- based off: https://vidsurf.glitch.me/index.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,12 +29,12 @@
 			if ($conn->connect_error) {
 				die("Connection failed: " . $conn->connect_error);
 			}
-			else {
-				echo("Connected!<br />");
-			}
 
 			$videoName = $_POST['videoTitle'];			
-			$videoDescription = $_POST['videoDescription'];			
+			$videoDescription = $_POST['videoDescription'];	
+			
+			$videoName = addslashes($videoName);
+			$videoDescription = addslashes($videoDescription);
 
 			$filePath = $_FILES["videoFile"]["name"];			
 			$pathParts = pathinfo($filePath);
@@ -42,8 +46,19 @@
 
 			$userId = $_SESSION['userId'];
 			
-			$query_existing_videos = "SELECT * FROM videos";
+			$query_existing_videos = "SELECT * FROM Videos";
 			$result = $conn->query($query_existing_videos);
+			
+			$all_video_ids = array();
+			
+			if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+					array_push($all_video_ids, $row['video_id']);
+				}
+			}
+			
+			$latest_id = max($all_video_ids);
+			echo ('<br />');
 			
 			// videos directory...
 			$videos_dir = "videos/";
@@ -51,13 +66,13 @@
 			
 			if(move_uploaded_file($_FILES['videoFile']['tmp_name'], $videoFile)) {
 				// add the video to DB
-				$query_add_video = "INSERT INTO videos (video_id, video_name, video_description, file_name, 
+				$query_add_video = "INSERT INTO Videos (video_id, video_name, video_description, video_tags, views, file_name, 
 					video_extension, video_file, date_uploaded, uploader, category)
-					VALUES (".($result->num_rows+1).", '$videoName', '$videoDescription', '$fileName', 
+					VALUES (".($latest_id+1).", '$videoName', '$videoDescription', '', 0, '$fileName', 
 					'$videoExt', '$videoFile', '2020-05-01', '$userId', '$category' )";
 
 				if ($conn->query($query_add_video) === TRUE) {
-					echo "New record created successfully.";
+					echo "Video successfully uploaded.";
 				} else {
 					echo "Error: " . $query_add_video . "<br>" . $conn->error;
 				}
@@ -79,7 +94,7 @@
 				<div class="uploader">
 					<table>
 					<tr>
-						<td><label><strong>Video file to upload </strong></label></td>
+						<td><label><strong>Video file to upload</strong></label></td>
 					</tr>
 					<tr>
 						<td><input class="form-control" type="file" name="videoFile" accept="video/*" required/></td>
@@ -120,6 +135,9 @@
 							<option value="Sports">Sports</option>
 						</select>
 						</td>
+					</tr>
+					<tr>
+						<td><label><strong>Tags</strong></label></td>
 					</tr>
 					</table>
 				</div>

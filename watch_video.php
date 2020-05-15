@@ -26,15 +26,22 @@
 		}
 		
 		$videoId = $_GET['id'];
-		$get_video = "SELECT * FROM videos WHERE video_id='$videoId'";
+		$get_video = "SELECT * FROM Videos WHERE video_id='$videoId'";
 		$result = $conn->query($get_video);
-
+		
 		if ($result->num_rows === 1) {
 			while($row = $result->fetch_assoc()) {
 				$location = $row['video_file'];
 				$title = $row['video_name'];
+				$desc = $row['video_description'];
+				$upload_date = $row['date_uploaded'];
+				//assigned to update the view count on the video...
+				$curr_view_count = $row['views'];
 			}
 		}
+		
+		$update_view_count = "UPDATE Videos SET Views=".($curr_view_count+1)." WHERE video_id=".$videoId."";
+		$update = $conn->query($update_view_count);		
 	?>
 
     <main>
@@ -55,7 +62,15 @@
 			<?php 
 				echo "<video class='vid' src='" . $location . "' controls width='100%' height='auto' >";			
 			?>;
-        </div>
+        </div>	
+        <div>
+			<div style="float: left;">Rate: *****</div>
+			<div style="float: right;">Views: <?php echo ($curr_view_count+1); ?></div>
+		</div>
+		<br />
+		<p class="video_paragraphs">Added: <?php echo ($upload_date); ?></p>
+		<hr />
+		<p class="video_paragraphs"><?php echo ($desc); ?></p>
       </section>
     </main>
 
