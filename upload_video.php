@@ -17,26 +17,20 @@
 		include("header.php");
 		
 		if(isset($_POST['upload_video'])) {
-			//connect to mysql using mysqli
-			$servername = "localhost";
-			$username = "root";
-			$password = "";
-			$db = "vidsurf";
-
-			// Create connection
-			$conn = new mysqli($servername, $username, $password, $db);
-			// Check connection
-			if ($conn->connect_error) {
-				die("Connection failed: " . $conn->connect_error);
-			}
+		    include("db_credentials.php");
 
 			$videoName = $_POST['videoTitle'];			
 			$videoDescription = $_POST['videoDescription'];	
+			$videoTags = $_POST['videoTags'];
 			
 			$videoName = addslashes($videoName);
 			$videoDescription = addslashes($videoDescription);
+			$videoTags = addslashes($videoTags);
+			
+			$videoTags = str_replace(",", ":", $videoTags); //replace commas w/ colons for storing in database
+			$videoTags = str_replace(" ", "", $videoTags); //remove spacing
 
-			$filePath = $_FILES["videoFile"]["name"];			
+			$filePath = $_FILES["videoFile"]["name"];
 			$pathParts = pathinfo($filePath);
 			
 			$fileName = $pathParts["filename"];
@@ -44,37 +38,64 @@
 
 			$category = $_POST['category'];
 
-			$userId = $_SESSION['userId'];
+			$userId = $_SESSION['userId'];			
+			
+			//upload the thumbnail, if one was supplied
+			$thumbnailPath = $_FILES["videoThumbnail"]["name"];
+			$thumbPathParts = pathinfo($thumbnailPath);
+			echo ($thumbnailPath);
+			
+			$thumbnails_dir = "images/thumbnails/";
+			$target_thumb_file = $thumbnails_dir . basename($_FILES["videoThumbnail"]["name"]);
+			$upload_ok = 1;
+			  
+			$check = getimagesize($_FILES["videoThumbnail"]["tmp_name"]);
+			if($check !== false) {
+				$upload_ok = 1;
+			} 
+			else {
+				$upload_ok = 0;
+			}
+			
+			if ($upload_ok != 0) {
+				if (move_uploaded_file($_FILES["videoThumbnail"]["tmp_name"], $target_thumb_file)) {
+					echo "The thumbnail file ". basename( $_FILES["videoThumbnail"]["name"]). " has been uploaded.";
+				} 
+			}
+			
+			//else, take 1st frame of uploaded video and use that as thumbnail
 			
 			$query_existing_videos = "SELECT * FROM Videos";
 			$result = $conn->query($query_existing_videos);
 			
 			$all_video_ids = array();
-			
-			if ($result->num_rows > 0) {
+
+			$latest_id = 0;			
+			$query_latest_video = "SELECT * FROM Videos ORDER BY video_id DESC LIMIT 1";
+			$result = $conn->query($query_latest_video);
+			if ($result->num_rows === 1) {
 				while($row = $result->fetch_assoc()) {
-					array_push($all_video_ids, $row['video_id']);
+					$latest_id = $row['video_id'];
 				}
 			}
 			
-			$latest_id = max($all_video_ids);
 			echo ('<br />');
 			
-			// videos directory...
-			$videos_dir = "videos/";
-			$videoFile = $target_dir . "" . $fileName;
+			// videos...
+			$videos_dir = "videos/uploaded/";
+			$videoFile = $target_dir . $fileName;
 			
 			if(move_uploaded_file($_FILES['videoFile']['tmp_name'], $videoFile)) {
 				// add the video to DB
 				$query_add_video = "INSERT INTO Videos (video_id, video_name, video_description, video_tags, views, file_name, 
-					video_extension, video_file, date_uploaded, uploader, category)
-					VALUES (".($latest_id+1).", '$videoName', '$videoDescription', '', 0, '$fileName', 
-					'$videoExt', '$videoFile', '2020-05-01', '$userId', '$category' )";
+					video_extension, video_file, date_uploaded, uploader, category, thumbnail)
+					VALUES (".($latest_id+1).", '$videoName', '$videoDescription', '$videoTags', 0, '$fileName', 
+					'$videoExt', '$videoFile', '2020-05-01', '$userId', '$category', '$thumbnailPath' )";
 
 				if ($conn->query($query_add_video) === TRUE) {
 					echo "Video successfully uploaded.";
 				} else {
-					echo "Error: " . $query_add_video . "<br>" . $conn->error;
+					echo "Error uploading video.";
 				}
 			}
 			
@@ -139,6 +160,21 @@
 					<tr>
 						<td><label><strong>Tags</strong></label></td>
 					</tr>
+					<tr>
+						<td><textarea class="form-control" rows="6" cols="50" name="videoTags" placeholder=
+						"Write your tags as a comma-separated list; e.g. keyboard, cat, video, original"></textarea></td>						
+					</tr>
+					<tr>
+						<td><label><strong>Thumbnail</strong></label></td>
+					</tr>
+					<tr>
+						<td><input class="form-control" type="file" name="videoThumbnail" accept="image/*" /></td>					
+					</tr>
+					<tr>
+						<td><p style="font-size: 12px; font-style: italic;">Thumbnails should have a 16:9 aspect ratio,
+						as any and all thumbnails uploaded to Vidsurf will be stretched to fit a 16:9 ratio and some 
+						thumbnails may end up looking awkward as a result.</p></td>
+					</tr>
 					</table>
 				</div>
 				<br />
@@ -149,10 +185,7 @@
 			<div class="heading">
 				<b>About uploading</b>
 			</div>
-			uppladibgfifibfibinkhfgjfgkjuppladibgfifibfibinkhfgjfgkjuppladibgfifibfibinkhfgjfgkj
-			djjjjjjjjjjjjjjjjjjjjjjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdj
-			ddjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdjddjdjdjdjdjdjdjdjdjdjdjdjdjdjdj
-			djdjdjdjdjdjdjdj
+			This is the page where you upload videos to Vidsurf.
 			</form>
 		</div>
 	</div>

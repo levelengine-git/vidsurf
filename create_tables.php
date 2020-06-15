@@ -5,17 +5,7 @@
   </head>
   <body>
 	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db = "vidsurf";
-
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $db);
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
+		include("db_credentials.php");
 
 /*
 	// sql to create table
@@ -56,7 +46,36 @@
 		text_col_b INT(3) UNSIGNED,
 		FOREIGN KEY (featured_video) REFERENCES Videos(video_id)
 	)";
+
+	$subscriptions_table = "CREATE TABLE Subscriptions (
+		subscription_id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		subscriber_id INT(8) UNSIGNED,
+		subscribed_to_id INT(8) UNSIGNED,
+		subscription_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		FOREIGN KEY (subscriber_id) REFERENCES Users(user_id),
+		FOREIGN KEY (subscribed_to_id) REFERENCES Users(user_id)
+	)";
 */
+	$comments_table = "CREATE TABLE Comments (
+		comment_id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		commentor_id INT(8) UNSIGNED,
+		video INT(8) UNSIGNED,
+		comment_text VARCHAR(1000),
+		upvotes INT(8),
+		downvotes INT(8),
+		reply_to INT(10) UNSIGNED, 	
+		comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		FOREIGN KEY (commentor_id) REFERENCES Users(user_id),
+		FOREIGN KEY (video) REFERENCES Videos(video_id)
+	)";
+	
+	if ($conn->query($comments_table) === TRUE) {
+		echo "Table Comments created successfully.<br />";
+	} else {
+		echo "Error creating table: " . $conn->error . "<br />";
+	}
+	
+	/*
 	if ($conn->query($users_table) === TRUE) {
 		echo "Table Users created successfully.<br />";
 	} else {
@@ -69,11 +88,18 @@
 		echo "Error creating table: " . $conn->error . "<br />";
 	}
 	
-		if ($conn->query($channels_table) === TRUE) {
+	if ($conn->query($channels_table) === TRUE) {
 		echo "Table Channels created successfully.<br />";
 	} else {
 		echo "Error creating table: " . $conn->error . "<br />";
 	}
+
+	if ($conn->query($subscriptions_table) === TRUE) {
+		echo "Table Subscriptions created successfully.<br />";
+	} else {
+		echo "Error creating table: " . $conn->error . "<br />";
+	}
+	*/
 	
 	//more tables go down here as needed...
 

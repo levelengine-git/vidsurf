@@ -1,3 +1,7 @@
+<?php
+	session_start();
+?>
+
 <!-- index, initial landing page -->
 <!-- saved from url=(0036)https://vidsurf.glitch.me/index.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,7 +25,8 @@
           <h1>
             Results for <?php 
 			$search_query = $_GET["video_query"];
-			echo $search_query; 
+			$search_query_no_spaces = str_replace(" ", "", $search_query); //remove spaces for additional query
+			echo $search_query;
 			?>
           </h1>
         </div>
@@ -32,20 +37,10 @@
 					header("location: index.php");
 				}
 				
-				$servername = "localhost";
-				$username = "root";
-				$password = "";
-				$db = "vidsurf";
-
-				// Create connection
-				$conn = new mysqli($servername, $username, $password, $db);
-				// Check connection
-				if ($conn->connect_error) {
-					die("Connection failed: " . $conn->connect_error);
-				}
+		        include("db_credentials.php");
 				
-				$video_query = "SELECT * FROM videos WHERE video_name LIKE '%$search_query%'
-					OR video_tags LIKE '%$search_query%'";
+				$video_query = "SELECT * FROM Videos WHERE video_name LIKE '%$search_query%'
+					OR video_tags LIKE '%$search_query_no_spaces%'";
 
 				$result = $conn->query($video_query);
 
@@ -55,9 +50,15 @@
 						'<tr>
 							<td class="video_cell">
 							  <div class="video-card">
-								<div class="thumbnail">
-								  <img src="images/image8-2-1024x576.png" style="width: 200px; height: 120px;">
-								</div>
+								<div class="thumbnail">';
+								$thumbnail = $row["thumbnail"];
+								if ($thumbnail != '') {
+									echo '<img src="images/thumbnails/'.$thumbnail.'" style="width: 200px; height: 120px;">';
+								}
+								else {
+									echo '<img src="images/image8-2-1024x576.png" style="width: 200px; height: 120px;">';
+								}								  
+								echo '</div>
 							</td>
 							<td class="video_cell">
 								<h3 class="video_title">

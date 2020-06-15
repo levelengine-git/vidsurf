@@ -71,5 +71,10 @@ div.content {
 }
 
 input.thumbnail {
-  max-width: 200px;
+  width: 200px;
+  height: 115px;
+}
+
+.subtext {
+	font-size: 12px;
 }

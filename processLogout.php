@@ -1,7 +1,4 @@
-<!-- process request from logout button -->
-
-<?php  
-	// get session data
+<?php
 	session_start();
 
 	// unset and destroy
@@ -9,5 +6,5 @@
 	session_destroy();
 
 	// then redirect to home page
-	header("location: index.php");	
+	echo "<script>window.location.replace('index.php');</script>";
 ?>

@@ -1,3 +1,7 @@
+<?php
+	session_start();
+?>
+
 <!-- This file processes the Sign Up Form --> 
 
 <?php
@@ -5,20 +9,7 @@
 	error_reporting(0);
 
 	//connect to mysql using mysqli
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db = "vidsurf";
-
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $db);
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-	else {
-		echo("Connected!<br />");
-	}
+	include("db_credentials.php");
 
 	$min_pass_length = /*8*/1;
 	
@@ -38,7 +29,7 @@
 	// check if the username is taken
 	$nameTaken = false;
 
-	$query_existing_users = "SELECT * FROM users";
+	$query_existing_users = "SELECT * FROM Users";
 	$result = $conn->query($query_existing_users);
 
 	if ($result->num_rows > 0) {
@@ -103,8 +94,6 @@
 			unset($_SESSION['userName']);
 			unset($_SESSION['userPass']);
 			unset($_SESSION['email']);
-			
-			require("signup.php");
 		}
 		else 
 		{			
@@ -112,20 +101,22 @@
 			echo "<div align=\"right\">";
 			echo "<h4> Welcome " . $userName . "</h4>";
 			echo "</div>";
-
-			require("index.php");
 			
 			// encrypt password, then write it into DB:
 			//print ("salt: ".$salt."<br />");
 			$userPass = crypt($userPass, '$2y$07$'.$salt.'$');
 			//print ("encrypted pass: ".$userPass."<br />");
 			
-			// add the user to DB
-			$query_add_user = "INSERT INTO users (user_id, username, password, email, join_date)
-				VALUES (".($result->num_rows+1).", '$userName', '$userPass', '$email', '2020-05-01', '')";
+			// add the user to DB, default country AND avatar to not specified
+			$query_add_user = "INSERT INTO Users (user_id, username, password, email, join_date, country, avatar)
+				VALUES (".($result->num_rows+1).", '$userName', '$userPass', '$email', '2020-05-01', '', '')";
+				
+			// IMPORTANT! Set userId!
+			$_SESSION['userId'] = ($result->num_rows+1);
 
 			if ($conn->query($query_add_user) === TRUE) {
 				echo "New record created successfully.";
+				echo "<script>window.location.replace('index.php');</script>";
 			} else {
 				echo "Error: " . $query_add_user . "<br>" . $conn->error;
 			}
